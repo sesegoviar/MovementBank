@@ -13,10 +13,11 @@ namespace Store.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
+            
 
-            services.AddDbContext<StoreContext>(opt => opt.UseInMemoryDatabase("Test"));
-            services.AddScoped<StoreContext>();
+            var defaultConnectionString = configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<StoreContext>(options =>
+               options.UseSqlServer(defaultConnectionString));
 
             services.AddScoped<IProductRepository, ProductRepository>();
 
