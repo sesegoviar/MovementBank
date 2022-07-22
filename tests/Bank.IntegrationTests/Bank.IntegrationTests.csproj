@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Store.Infrastructure\Bank.Infrastructure.csproj" />
-    <ProjectReference Include="..\Store.SharedDatabaseSetup\Bank.SharedDatabaseSetup.csproj" />
+    <ProjectReference Include="..\..\src\Bank.Infrastructure\Bank.Infrastructure.csproj" />
+    <ProjectReference Include="..\Bank.SharedDatabaseSetup\Bank.SharedDatabaseSetup.csproj" />
   </ItemGroup>
 
 </Project>

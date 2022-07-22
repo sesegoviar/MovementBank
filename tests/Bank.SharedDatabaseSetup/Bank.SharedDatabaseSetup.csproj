@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Store.Infrastructure\Bank.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Bank.Infrastructure\Bank.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
