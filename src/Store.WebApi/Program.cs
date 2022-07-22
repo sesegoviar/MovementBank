@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Store.ApplicationCore;
@@ -6,35 +7,24 @@ using Store.Infrastructure;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace Store.WebApi {
 
-// Add services to the container.
+    public class Program
+    {
+        public async static Task Main(string[] args)
+        {
+            var builder = CreateHostBuilder(args).Build();                        
 
-builder.Services.AddApplicationCore();
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+            await builder.RunAsync();
+        }
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });        
+    }    
 }
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
-
-public partial class Program { }
