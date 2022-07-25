@@ -1,0 +1,12 @@
+docker compose up -d --build
+despliegue
+
+
+
+
+
+dotnet ef migrations add Initial --project Bank.Infrastructure --startup-project Bank.WebApi
+se ejecuta dentro de la carpeta src
+
+dotnet ef database update
+dentro del src bank\api
