@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Bank.WebApi\Bank.WebApi.csproj" />
-    <ProjectReference Include="..\Bank.SharedDatabaseSetup\Bank.SharedDatabaseSetup.csproj" />
   </ItemGroup>
 
 </Project>

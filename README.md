@@ -7,12 +7,12 @@ dotnet restore
 dotnet build
 ```
 
-Configure the database settings in src\Store.WebApi\appsettings.json
+Configure the database settings in src\Bank.WebApi\appsettings.json
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=DemoStore;User ID=sa;Password=coronadoserver2018;Trusted_Connection=True;"
+    "DefaultConnection": "Server=127.0.0.1,1433;Database=Master;User ID=SA;Password=#ecuador123;Trusted_Connection=True;"
   },
   "Logging": {
     "LogLevel": {
@@ -23,13 +23,13 @@ Configure the database settings in src\Store.WebApi\appsettings.json
 }
 ```
 
-To create the tables in the database, go to src\Store.WebApi
+To create the tables in the database, go to src\Bank.WebApi
 ```
-dotnet ef migrations add Initial --project Store.Infrastructure --startup-project Store.WebApi
+dotnet ef migrations add Initial --project Bank.Infrastructure --startup-project Bank.WebApi
 dotnet ef database update
 ```
 
-To run, go to src\Store.WebApi
+To run, go to src\Bank.WebApi
 ```
 dotnet run
 ```
@@ -38,3 +38,4 @@ To test Unit and Integration projects, go to solution folder
 ```
 dotnet test
 ```
+"# CleanNet5SqlServer" 

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Bank.ApplicationCore.Interfaces;
+using Bank.Infrastructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Store.ApplicationCore.Interfaces;
@@ -20,7 +22,9 @@ namespace Store.Infrastructure
                options.UseSqlServer(defaultConnectionString));
 
             services.AddScoped<IProductRepository, ProductRepository>();
-
+            services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IMovementRepository, MovementRepository>();
             var serviceProvider = services.BuildServiceProvider();
             try
             {

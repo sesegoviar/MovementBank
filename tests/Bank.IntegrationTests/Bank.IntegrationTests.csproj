@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Bank.Infrastructure\Bank.Infrastructure.csproj" />
-    <ProjectReference Include="..\Bank.SharedDatabaseSetup\Bank.SharedDatabaseSetup.csproj" />
   </ItemGroup>
 
 </Project>

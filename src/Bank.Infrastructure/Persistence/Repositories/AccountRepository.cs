@@ -1,0 +1,91 @@
+﻿using AutoMapper;
+using Bank.ApplicationCore.DTOs.Account;
+using Bank.ApplicationCore.Entities;
+using Bank.ApplicationCore.Interfaces;
+using Store.ApplicationCore.Exceptions;
+using Store.Infrastructure.Persistence.Contexts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Bank.Infrastructure.Persistence.Repositories
+{
+    public class AccountRepository : IAccountRepository
+    {
+        private readonly StoreContext storeContext;
+        private readonly IMapper mapper;
+
+        public AccountRepository(StoreContext storeContext, IMapper mapper)
+        {
+            this.storeContext = storeContext;
+            this.mapper = mapper;
+        }
+
+        public SingleAccountResponse CreateAccount(CreateAccountRequest request)
+        {
+            var client = this.storeContext.Client.Find(request.ClientId);
+            var account = this.mapper.Map<Account>(request);
+            account.NumberAccount = request.NumberAccount;
+            account.State = request.State;
+            account.TypeAccount = request.TypeAccount;
+            account.BalanceInitial = request.BalanceInitial;
+            account.Client = client;
+            this.storeContext.Account.Add(account);
+            this.storeContext.SaveChanges();
+
+            return this.mapper.Map<SingleAccountResponse>(account);
+        }
+
+        public void DeleteAccountById(int accountId)
+        {
+            var account = this.storeContext.Account.Find(accountId);
+            if (account != null)
+            {
+                this.storeContext.Account.Remove(account);
+                this.storeContext.SaveChanges();
+            }
+            else
+            {
+                throw new NotFoundException();
+            }
+        }
+
+        public SingleAccountResponse GetAccountById(int accountId)
+        {
+            var account = this.storeContext.Account.Find(accountId);
+            if (account != null)
+            {
+                return this.mapper.Map<SingleAccountResponse>(account);
+            }
+
+            throw new NotFoundException();
+        }
+
+        public List<AccountResponse> GetAccounts()
+        {
+            return this.storeContext.Account.Select(p => this.mapper.Map<AccountResponse>(p)).ToList();
+        }
+
+        public SingleAccountResponse UpdateAccount(int accountId, UpdateAccountRequest request)
+        {
+            var client = this.storeContext.Client.Find(request.ClientId);
+            var account = this.storeContext.Account.Find(accountId);
+            if (account != null)
+            {
+                account.NumberAccount = request.NumberAccount;
+                account.State = request.State;
+                account.TypeAccount = request.TypeAccount;
+                account.BalanceInitial = request.BalanceInitial;
+                account.Client = client;
+                this.storeContext.Account.Update(account);
+                this.storeContext.SaveChanges();
+
+                return this.mapper.Map<SingleAccountResponse>(account);
+            }
+
+            throw new NotFoundException();
+        }
+    }
+}
