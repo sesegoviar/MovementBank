@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Contexts;
-using Store.SharedDatabaseSetup;
+using Bank.SharedDatabaseSetup;
 using System;
 using System.Data.Common;
 

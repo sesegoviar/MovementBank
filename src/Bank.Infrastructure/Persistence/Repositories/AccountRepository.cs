@@ -2,6 +2,7 @@
 using Bank.ApplicationCore.DTOs.Account;
 using Bank.ApplicationCore.Entities;
 using Bank.ApplicationCore.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Store.ApplicationCore.Exceptions;
 using Store.Infrastructure.Persistence.Contexts;
 using System;
@@ -65,7 +66,8 @@ namespace Bank.Infrastructure.Persistence.Repositories
 
         public List<AccountResponse> GetAccounts()
         {
-            return this.storeContext.Account.Select(p => this.mapper.Map<AccountResponse>(p)).ToList();
+       
+            return this.storeContext.Account.Include(x => x.Client).Select(p => this.mapper.Map<AccountResponse>(p)).ToList();
         }
 
         public SingleAccountResponse UpdateAccount(int accountId, UpdateAccountRequest request)

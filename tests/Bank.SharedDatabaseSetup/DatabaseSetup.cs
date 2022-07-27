@@ -1,9 +1,10 @@
-﻿using Bogus;
+﻿using Bank.ApplicationCore.Entities;
+using Bogus;
 using Store.ApplicationCore.Entities;
 using Store.ApplicationCore.Utils;
 using Store.Infrastructure.Persistence.Contexts;
 
-namespace Store.SharedDatabaseSetup
+namespace Bank.SharedDatabaseSetup
 {
     public static class DatabaseSetup
     {
@@ -11,19 +12,15 @@ namespace Store.SharedDatabaseSetup
         {
             context.Products.RemoveRange(context.Products);
 
-            var productIds = 1;
-            var fakeProducts = new Faker<Product>()
-                .RuleFor(o => o.Name, f => $"Product {productIds}")
-                .RuleFor(o => o.Description, f => $"Description {productIds}")
-                .RuleFor(o => o.Id, f => productIds++)
-                .RuleFor(o => o.Stock, f => f.Random.Number(1, 50))
-                .RuleFor(o => o.Price, f => f.Random.Double(0.01, 100))
-                .RuleFor(o => o.CreatedAt, f => DateUtil.GetCurrentDate())
-                .RuleFor(o => o.UpdatedAt, f => DateUtil.GetCurrentDate());
+            var clientIds = 1;
+            var fakeClients = new Faker<Client>()
+                .RuleFor(o => o.Name, f => $"Client {clientIds}")
+                .RuleFor(o => o.Direction, f => $"Description {clientIds}")
+                .RuleFor(o => o.Id, f => clientIds++);
 
-            var products = fakeProducts.Generate(10);
+            var clients = fakeClients.Generate(1);
 
-            context.AddRange(products);
+            context.AddRange(clients);
 
             context.SaveChanges();
         }

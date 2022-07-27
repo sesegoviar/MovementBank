@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Bank.ApplicationCore.DTOs.Account;
 using Bank.ApplicationCore.DTOs.Movement;
 using Bank.ApplicationCore.Entities;
@@ -85,7 +86,9 @@ namespace Bank.Infrastructure.Persistence.Repositories
 
         public List<MovementResponse> GetMovements()
         {
-            return this.storeContext.Movement.Select(p => this.mapper.Map<MovementResponse>(p)).ToList();
+            return this.storeContext.Movement.Include(x => x.Account).Select(p => this.mapper.Map<MovementResponse>(p)).ToList();
+
+
         }
 
         public SingleMovementResponse UpdateMovement(int movementId, UpdateMovementRequest request)
@@ -110,7 +113,7 @@ namespace Bank.Infrastructure.Persistence.Repositories
         public List<ReporteResponse> GetMovements(DateTime date, int client)
         {
 
-            var accounts = this.storeContext.Account.Select(p => this.mapper.Map<AccountResponse>(p)).ToList().Where(x => x.ClientId == client);
+            var accounts = this.storeContext.Account.Where(p => p.Client.Id==client).Include(x=>x.Client).ToList();
             List<MovementResponse> lista = new List<MovementResponse>();
             List<ReporteResponse> reporte = new List<ReporteResponse>();
             foreach (var account in accounts)
