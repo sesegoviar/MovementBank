@@ -10,7 +10,7 @@ namespace Bank.SharedDatabaseSetup
     {
         public static void SeedData(StoreContext context)
         {
-            context.Products.RemoveRange(context.Products);
+            context.Client.RemoveRange(context.Client);
 
             var clientIds = 1;
             var fakeClients = new Faker<Client>()

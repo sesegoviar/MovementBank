@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bank.ApplicationCore.Common.Constants;
 
 namespace Bank.Infrastructure.Persistence.Repositories
 {
@@ -29,21 +30,19 @@ namespace Bank.Infrastructure.Persistence.Repositories
         {
             var obj = this.storeContext.Movement.Find(request.AccountId);
             var account = this.storeContext.Account.Find(request.AccountId);
-           // var movementBalance = this.storeContext.Movement.OrderByDescending(request.AccountId);
-            //var movementBalance = this.storeContext.Movement.list.OrderBy(x => x.Product.Name).ToList();
             var movementBalance = this.storeContext.Movement.Select(p => this.mapper.Map<MovementResponse>(p)).ToList().Where(x => x.AccountId==request.AccountId);
             var movement = this.mapper.Map<Movement>(request);
             var balance = 0.0;
             if (movementBalance.Count()> 0)
             {
-                if (request.TypeMovement.Equals("Ahorro"))
+                if (request.TypeMovement.Equals(Constant.AHORRO))
                     balance = Convert.ToDouble(movementBalance.FirstOrDefault().Balance) + request.Value;
                 else
                     balance = Convert.ToDouble(movementBalance.FirstOrDefault().Balance) - request.Value;
             }
             else
             {
-                if(request.TypeMovement.Equals("Ahorro"))
+                if(request.TypeMovement.Equals(Constant.AHORRO))
                     balance = account.BalanceInitial + request.Value;
                 else
                     balance = account.BalanceInitial - request.Value;
@@ -75,10 +74,20 @@ namespace Bank.Infrastructure.Persistence.Repositories
 
         public SingleMovementResponse GetMovementById(int movementId)
         {
-            var movement = this.storeContext.Movement.Find(movementId);
-            if (movement != null)
+            var movementL = this.storeContext.Movement.Where(p => p.Id == movementId).Include(x => x.Account).ToList();
+            if (movementL.Count>0)
             {
-                return this.mapper.Map<SingleMovementResponse>(movement);
+                var movement = movementL.ElementAt(0);
+                var mov = new SingleMovementResponse()
+                {
+                    Id = movement.Id,
+                    Balance = movement.Balance,
+                    Date = movement.Date,
+                    AccountId = movement.Account.Id,
+                    TypeMovement = movement.TypeMovement,
+                    Value = movement.Value
+                };
+                return mov;
             }
 
             throw new NotFoundException();
@@ -97,7 +106,6 @@ namespace Bank.Infrastructure.Persistence.Repositories
             var movement = this.storeContext.Movement.Find(movementId);
             if (movement != null)
             {
-               // movement.Balance = request.Balance;
                 movement.Value = request.Value;
                 movement.Date = request.Date;
                 movement.TypeMovement = request.TypeMovement;
@@ -139,7 +147,6 @@ namespace Bank.Infrastructure.Persistence.Repositories
                 };
                 reporte.Add(reporteI);
             }
-            //return this.storeContext.Movement.Select(p => this.mapper.Map<MovementResponse>(p)).ToList();
             return reporte;
         }
     }

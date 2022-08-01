@@ -55,10 +55,20 @@ namespace Bank.Infrastructure.Persistence.Repositories
 
         public SingleAccountResponse GetAccountById(int accountId)
         {
-            var account = this.storeContext.Account.Find(accountId);
-            if (account != null)
+            var accountL = this.storeContext.Account.Where(p => p.Id == accountId).Include(x => x.Client).ToList();
+            if (accountL.Count>0)
             {
-                return this.mapper.Map<SingleAccountResponse>(account);
+                var account = accountL.ElementAt(0);
+                var acc = new SingleAccountResponse()
+                {
+                    Id = account.Id,
+                    BalanceInitial = account.BalanceInitial,
+                    ClientId = account.Client.Id,
+                    NumberAccount = account.NumberAccount,
+                    State = account.State,
+                    TypeAccount = account.TypeAccount
+                };
+                return acc;
             }
 
             throw new NotFoundException();
